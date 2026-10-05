@@ -11,7 +11,10 @@ import { brand } from "@/config/brand";
  */
 export default function HomePage() {
   return (
-    <main className="px-gutter lg:px-gutter-lg mx-auto flex w-full max-w-(--container-max) flex-1 flex-col items-center justify-center py-24 text-center">
+    <main
+      id="main"
+      className="px-gutter lg:px-gutter-lg mx-auto flex w-full max-w-(--container-max) flex-1 flex-col items-center justify-center py-24 text-center"
+    >
       <p className="text-muted-foreground text-body-sm">{brand.name}</p>
       <h1 className="text-display mt-3">{brand.tagline}</h1>
       <p className="text-muted-foreground text-body-lg mt-6 max-w-xl">{brand.description}</p>
