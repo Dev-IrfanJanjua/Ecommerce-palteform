@@ -5,10 +5,14 @@
   "description": "Full-stack e-commerce platform - repository root. Application code lives in frontend/ and later backend/.",
   "scripts": {
     "prepare": "husky",
-    "frontend": "npm --prefix frontend run",
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
     "lint": "npm --prefix frontend run lint",
     "typecheck": "npm --prefix frontend run typecheck",
-    "format:check": "npm --prefix frontend run format:check"
+    "format": "npm --prefix frontend run format",
+    "format:check": "npm --prefix frontend run format:check",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run build"
   },
   "devDependencies": {
     "husky": "^9.1.7",
