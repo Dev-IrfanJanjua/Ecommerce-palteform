@@ -1,0 +1,223 @@
+/* ============================================================================
+   DESIGN TOKENS — the single source of truth for how this store looks.
+   ============================================================================
+
+   To restyle the entire site, edit the values in this file. Nothing else.
+   No component contains a colour, radius, shadow or motion value of its own.
+
+   Colours are plain hex so they are easy to paste from any colour picker.
+
+   Naming rule: tokens are named after their JOB, never their colour.
+   `--primary`, not `--navy`. Swapping the palette then stays a value change.
+
+   Every colour pair below was contrast-checked against WCAG AA (4.5:1 for
+   body text, 3:1 for UI boundaries). See docs/design-system.md.
+
+   Current palette: "Cool Ink" — navy primary, clean and trustworthy.
+
+   ---------------------------------------------------------------------------
+   HOW THE TWO BLOCKS BELOW DIFFER
+
+   `:root`  = raw values. Plain CSS variables, readable by anything.
+   `@theme` = Tailwind v4's config. Declaring `--color-sale` here is what makes
+              the utility classes `bg-sale` and `text-sale` exist at all.
+
+   Tailwind v4 has no tailwind.config.js. The @theme block IS the config.
+   ========================================================================= */
+
+:root {
+  /* --- Core surfaces ------------------------------------------------------ */
+  --background: #f6f8fb;
+  --foreground: #0b1220;
+  --card: #ffffff;
+  --card-foreground: #0b1220;
+  --popover: #ffffff;
+  --popover-foreground: #0b1220;
+
+  /* --- Brand / interactive ------------------------------------------------ */
+  --primary: #1d3557;
+  --primary-foreground: #ffffff;
+  --secondary: #e9eef5;
+  --secondary-foreground: #1d3557;
+  --muted: #e9eef5;
+  --muted-foreground: #52607a;
+
+  /* Accent is for FILLS and BORDERS only.
+     Its foreground is near-black on purpose: white text on this red is
+     4.17:1, which fails AA. Near-black gives 4.80:1 and passes. */
+  --accent: #e63946;
+  --accent-foreground: #140406;
+
+  --destructive: #c81e3a;
+  --destructive-foreground: #ffffff;
+
+  /* --- Lines and focus ---------------------------------------------------- */
+  /* `--border` is for decorative dividers, which have no contrast minimum.
+     `--input` is deliberately darker: a form field's edge carries meaning,
+     so it must clear 3:1 against the background (this is 3.18:1). */
+  --border: #d8e0ec;
+  --input: #7d8caa;
+  --ring: #1d3557;
+
+  /* --- Storefront extras -------------------------------------------------- */
+  --surface: #e9eef5;
+  --surface-foreground: #0b1220;
+
+  --sale: #c81e3a;
+  --sale-foreground: #ffffff;
+
+  --success: #176b4d;
+  --success-foreground: #ffffff;
+  --warning: #8a5200;
+  --warning-foreground: #ffffff;
+
+  --badge-new: #1d3557;
+  --badge-new-foreground: #ffffff;
+  --badge-bestseller: #e8a33d;
+  --badge-bestseller-foreground: #241703;
+
+  --announcement-bg: #1d3557;
+  --announcement-foreground: #ffffff;
+
+  --footer-bg: #0b1220;
+  --footer-foreground: #f6f8fb;
+  --footer-muted: #9aaac4;
+
+  --rating: #c97a09;
+
+  /* Scrims drawn over images and behind drawers. */
+  --hero-overlay: linear-gradient(
+    to top,
+    rgb(11 18 32 / 0.75) 0%,
+    rgb(11 18 32 / 0.35) 45%,
+    rgb(11 18 32 / 0) 100%
+  );
+  --overlay: rgb(11 18 32 / 0.55);
+
+  /* --- Typography feel ---------------------------------------------------- */
+  /* Families are loaded in src/styles/fonts.ts. These control the *feel*:
+     set --heading-transform to `uppercase` for a sportier look, in one line. */
+  --heading-weight: 700;
+  --heading-tracking: -0.02em;
+  --heading-transform: none;
+  --body-weight: 400;
+  --body-line-height: 1.6;
+
+  /* --- Shape -------------------------------------------------------------- */
+  /* Base radius. shadcn derives its own sm/md/lg/xl scale from this.
+     Set it (and the --radius-* values in @theme) to 0 for a sharp look. */
+  --radius: 0.5rem;
+
+  /* --- Layout ------------------------------------------------------------- */
+  --container-max: 80rem;
+  --gutter: 1rem;
+  --gutter-lg: 2rem;
+  --section-y: 3rem;
+  --section-y-lg: 5rem;
+  --header-height: 4rem;
+  --announcement-height: 2.5rem;
+}
+
+/* ============================================================================
+   TAILWIND THEME
+
+   Colours map to the :root values above, so a palette swap is one edit there.
+
+   Sizes, radii, shadows and easing are declared directly here rather than
+   duplicated in :root — Tailwind's namespaces (--text-*, --radius-*,
+   --shadow-*, --ease-*) would collide with same-named raw variables and
+   create a circular reference.
+   ========================================================================= */
+@theme inline {
+  /* --- Colours ------------------------------------------------------------ */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-sale: var(--sale);
+  --color-sale-foreground: var(--sale-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-badge-new: var(--badge-new);
+  --color-badge-new-foreground: var(--badge-new-foreground);
+  --color-badge-bestseller: var(--badge-bestseller);
+  --color-badge-bestseller-foreground: var(--badge-bestseller-foreground);
+  --color-announcement-bg: var(--announcement-bg);
+  --color-announcement-foreground: var(--announcement-foreground);
+  --color-footer-bg: var(--footer-bg);
+  --color-footer-foreground: var(--footer-foreground);
+  --color-footer-muted: var(--footer-muted);
+  --color-rating: var(--rating);
+
+  /* --- Fonts -------------------------------------------------------------- */
+  /* The two families are injected onto <html> by src/styles/fonts.ts. */
+  --font-heading: var(--font-heading-family);
+  --font-body: var(--font-body-family);
+  --font-sans: var(--font-body-family);
+
+  /* --- Type scale --------------------------------------------------------- */
+  /* clamp(min, preferred, max) grows with the viewport, so headings shrink
+     on phones without a single media query. */
+  --text-display: clamp(2.5rem, 1.6rem + 4.5vw, 4.5rem);
+  --text-display--line-height: 1.05;
+  --text-h1: clamp(2rem, 1.4rem + 3vw, 3.25rem);
+  --text-h1--line-height: 1.1;
+  --text-h2: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --text-h2--line-height: 1.2;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-h3--line-height: 1.3;
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.4;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-body-xs: 0.75rem;
+
+  /* --- Radius ------------------------------------------------------------- */
+  --radius-button: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-image: 0.75rem;
+  --radius-input: 0.5rem;
+
+  /* --- Elevation ---------------------------------------------------------- */
+  --shadow-card: 0 1px 2px rgb(11 18 32 / 0.04), 0 4px 12px rgb(11 18 32 / 0.06);
+  --shadow-drawer: -8px 0 32px rgb(11 18 32 / 0.18);
+  --shadow-popover: 0 8px 24px rgb(11 18 32 / 0.12);
+
+  /* --- Spacing ------------------------------------------------------------ */
+  --spacing-gutter: var(--gutter);
+  --spacing-gutter-lg: var(--gutter-lg);
+  --spacing-section: var(--section-y);
+  --spacing-section-lg: var(--section-y-lg);
+  --spacing-header: var(--header-height);
+  --spacing-announcement: var(--announcement-height);
+
+  /* --- Motion ------------------------------------------------------------- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* --- Stacking ----------------------------------------------------------- */
+  --z-index-header: 40;
+  --z-index-drawer: 50;
+  --z-index-modal: 60;
+  --z-index-toast: 70;
+}
