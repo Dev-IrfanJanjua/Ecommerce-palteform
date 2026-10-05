@@ -1,0 +1,17 @@
+{
+  "name": "ecommerce-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Full-stack e-commerce platform - repository root. Application code lives in frontend/ and later backend/.",
+  "scripts": {
+    "prepare": "husky",
+    "frontend": "npm --prefix frontend run",
+    "lint": "npm --prefix frontend run lint",
+    "typecheck": "npm --prefix frontend run typecheck",
+    "format:check": "npm --prefix frontend run format:check"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  }
+}
