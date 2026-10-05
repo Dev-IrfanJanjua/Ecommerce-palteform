@@ -48,13 +48,69 @@ export const brand = {
     "Cash on delivery available nationwide",
   ],
 
+  /**
+   * Main navigation. `children` groups render as a desktop mega-menu and as
+   * expandable groups in the mobile sheet. Add or remove entries here — the
+   * header and mobile menu both read this list and need no edits.
+   */
   nav: [
-    { label: "Sneakers", href: "/collections/sneakers" },
-    { label: "Running", href: "/collections/running" },
-    { label: "Boots", href: "/collections/boots" },
-    { label: "Formal", href: "/collections/formal" },
-    { label: "Sandals", href: "/collections/sandals" },
-    { label: "Training", href: "/collections/training" },
+    {
+      label: "Sneakers",
+      href: "/collections/sneakers",
+      children: [
+        { label: "All sneakers", href: "/collections/sneakers" },
+        { label: "Men", href: "/collections/sneakers?gender=men" },
+        { label: "Women", href: "/collections/sneakers?gender=women" },
+        { label: "New arrivals", href: "/collections/sneakers?isNew=true" },
+      ],
+    },
+    {
+      label: "Running",
+      href: "/collections/running",
+      children: [
+        { label: "All running", href: "/collections/running" },
+        { label: "Men", href: "/collections/running?gender=men" },
+        { label: "Women", href: "/collections/running?gender=women" },
+        { label: "On sale", href: "/collections/running?onSale=true" },
+      ],
+    },
+    {
+      label: "Boots",
+      href: "/collections/boots",
+      children: [
+        { label: "All boots", href: "/collections/boots" },
+        { label: "Men", href: "/collections/boots?gender=men" },
+        { label: "Women", href: "/collections/boots?gender=women" },
+      ],
+    },
+    {
+      label: "Formal",
+      href: "/collections/formal",
+      children: [
+        { label: "All formal", href: "/collections/formal" },
+        { label: "Men", href: "/collections/formal?gender=men" },
+        { label: "Women", href: "/collections/formal?gender=women" },
+      ],
+    },
+    {
+      label: "Sandals",
+      href: "/collections/sandals",
+      children: [
+        { label: "All sandals", href: "/collections/sandals" },
+        { label: "Men", href: "/collections/sandals?gender=men" },
+        { label: "Women", href: "/collections/sandals?gender=women" },
+      ],
+    },
+    {
+      label: "Training",
+      href: "/collections/training",
+      children: [
+        { label: "All training", href: "/collections/training" },
+        { label: "Men", href: "/collections/training?gender=men" },
+        { label: "Women", href: "/collections/training?gender=women" },
+      ],
+    },
+    { label: "Sale", href: "/collections/all?onSale=true" },
   ],
 
   footer: {
@@ -95,6 +151,8 @@ export const brand = {
       { label: "Facebook", href: "https://facebook.com" },
       { label: "YouTube", href: "https://youtube.com" },
     ],
+    /** Generic payment labels. Real brand marks need their own licensing. */
+    paymentMethods: ["Visa", "Mastercard", "Easypaisa", "JazzCash", "Cash on delivery"],
   },
 
   /** Shown on the home page and in the footer. Numbers come from the rules

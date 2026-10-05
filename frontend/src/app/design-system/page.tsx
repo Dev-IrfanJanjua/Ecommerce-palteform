@@ -58,7 +58,10 @@ export default function DesignSystemPage() {
   const compareAt = 3199000;
 
   return (
-    <main className="px-gutter py-section lg:px-gutter-lg mx-auto w-full max-w-(--container-max)">
+    <main
+      id="main"
+      className="px-gutter py-section lg:px-gutter-lg mx-auto w-full max-w-(--container-max)"
+    >
       <header>
         <p className="text-muted-foreground text-body-sm">{brand.name} design system</p>
         <h1 className="text-display mt-2">Every token, one page</h1>
