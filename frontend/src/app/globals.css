@@ -12,6 +12,11 @@
    tokens.css, and nothing else. */
 @custom-variant dark (&:is(.dark *));
 
+/* Applies only on devices with a real pointer. Used for product-card image
+   swaps: on a touch screen a "hover" fires on tap and would flash the second
+   image just as the shopper navigates away. */
+@custom-variant hover-hover (@media (hover: hover));
+
 /* shadcn derives its radius scale from a single --radius value. */
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);
