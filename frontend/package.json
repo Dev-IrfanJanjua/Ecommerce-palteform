@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "validate:catalog": "tsx scripts/validate-catalog.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -43,6 +44,7 @@
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   },
   "lint-staged": {
