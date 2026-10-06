@@ -14,6 +14,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { brand } from "@/config/brand";
 import { discountPercent, formatPrice } from "@/lib/format";
+import { ProductImage } from "@/components/product/product-image";
+import { buildCatalog, buildCollections } from "@/data/catalog";
 
 export const metadata: Metadata = {
   title: "Design system",
@@ -51,6 +53,13 @@ function Swatch({ name, className, note }: { name: string; className: string; no
 }
 
 /* ------------------------------------------------------------------ */
+
+/* Real colourways from the catalog. Typing hex literals here would trip the
+   hard-coded-style guard — product colour is data, and it belongs in the data
+   layer, not in a component. */
+const courtClassic = buildCatalog().find((p) => p.slug === "court-classic-low");
+const sampleColors = courtClassic?.colors ?? [];
+const sampleHex = sampleColors[2]?.hex ?? sampleColors[0]?.hex ?? "";
 
 export default function DesignSystemPage() {
   // Sample prices in minor units (paisa), matching the real catalog ladder.
@@ -263,6 +272,51 @@ export default function DesignSystemPage() {
               <Skeleton className="h-4 w-1/3" />
             </div>
           </article>
+        </div>
+      </Section>
+
+      {/* ---------------------------------------------------------- */}
+      <Section
+        title="Product placeholders"
+        hint="One silhouette per collection, painted from each colourway's own hex. Swapped for real photography by flipping HAS_REAL_PHOTOS in product-image.tsx."
+      >
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {buildCollections().map((collection) => (
+            <figure key={collection.slug}>
+              <div className="rounded-image bg-surface relative aspect-4/5 overflow-hidden">
+                <ProductImage
+                  src=""
+                  alt={`${collection.name} placeholder`}
+                  hex={sampleHex}
+                  collection={collection.slug}
+                />
+              </div>
+              <figcaption className="text-muted-foreground text-body-xs mt-2">
+                {collection.name}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <p className="text-muted-foreground text-body-sm mt-8">
+          The same silhouette in different colourways:
+        </p>
+        <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {sampleColors.map((color) => (
+            <figure key={color.name}>
+              <div className="rounded-image bg-surface relative aspect-4/5 overflow-hidden">
+                <ProductImage
+                  src=""
+                  alt={`Sneaker in ${color.name}`}
+                  hex={color.hex}
+                  collection="sneakers"
+                />
+              </div>
+              <figcaption className="text-muted-foreground text-body-xs mt-2">
+                {color.name}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </Section>
 
