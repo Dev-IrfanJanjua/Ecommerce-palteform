@@ -20,7 +20,8 @@
     "backend:smoke": "npm --prefix backend run smoke",
     "backend:typecheck": "npm --prefix backend run typecheck",
     "backend:seed": "npm --prefix backend run seed",
-    "backend:db-check": "npm --prefix backend run db:check"
+    "backend:db-check": "npm --prefix backend run db:check",
+    "backend:ping": "npm --prefix backend run db:ping"
   },
   "devDependencies": {
     "husky": "^9.1.7",

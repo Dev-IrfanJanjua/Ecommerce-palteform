@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "smoke": "tsx scripts/smoke-test.mts",
     "seed": "tsx scripts/seed.mts",
-    "db:check": "tsx scripts/check-models.mts"
+    "db:check": "tsx scripts/check-models.mts",
+    "db:ping": "tsx scripts/db-ping.mts"
   },
   "keywords": [],
   "author": "",
