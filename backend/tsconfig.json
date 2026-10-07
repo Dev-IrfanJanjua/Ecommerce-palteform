@@ -22,7 +22,12 @@
     "resolveJsonModule": true,
     "sourceMap": true,
 
-    "paths": { "@/*": ["./src/*"] }
+    // The seed and model-check scripts import the frontend's catalogue
+    // generator so the two never drift. That file uses its own "@/" alias, so
+    // the backend's is given a fallback: resolve against backend/src first,
+    // then frontend/src. Only scripts/ reaches across; src/ never does, and
+    // scripts/ is excluded from the compiled build.
+    "paths": { "@/*": ["./src/*", "../frontend/src/*"] }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
