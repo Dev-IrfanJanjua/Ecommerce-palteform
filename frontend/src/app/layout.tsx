@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Toaster } from "@/components/ui/sonner";
 import { brand } from "@/config/brand";
 import { fontVariables } from "@/styles/fonts";
 import "./globals.css";
@@ -37,6 +38,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         {children}
         <Footer />
+        {/* Single toast host for the whole app. */}
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );
