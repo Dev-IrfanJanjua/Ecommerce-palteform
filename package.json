@@ -12,8 +12,13 @@
     "typecheck": "npm --prefix frontend run typecheck",
     "format": "npm --prefix frontend run format",
     "format:check": "npm --prefix frontend run format:check",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run validate:catalog && npm run build",
-    "validate:catalog": "npm --prefix frontend run validate:catalog"
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run validate:catalog && npm run build && npm run backend:typecheck && npm run backend:build && npm run backend:smoke",
+    "validate:catalog": "npm --prefix frontend run validate:catalog",
+    "backend": "npm --prefix backend run",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:build": "npm --prefix backend run build",
+    "backend:smoke": "npm --prefix backend run smoke",
+    "backend:typecheck": "npm --prefix backend run typecheck"
   },
   "devDependencies": {
     "husky": "^9.1.7",

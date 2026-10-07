@@ -32,3 +32,6 @@ test-results/
 .vscode/
 .idea/
 *.swp
+
+# Backend build output
+backend/dist/
