@@ -4,7 +4,7 @@ import { Container } from "@/components/common/container";
 
 export default function NotFound() {
   return (
-    <main className="py-section lg:py-section-lg">
+    <main id="main" className="py-section lg:py-section-lg">
       <Container>
         <div className="flex flex-col items-center py-20 text-center">
           <h1 className="text-h2">Page not found</h1>

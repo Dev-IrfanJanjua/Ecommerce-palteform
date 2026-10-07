@@ -185,7 +185,11 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Accordions */}
+        {/* Accordions.
+            shadcn's AccordionTrigger wraps its button in an <h3>. Without a
+            heading above them the page jumped h1 -> h3, which is a real
+            navigation problem for screen-reader users who move by heading. */}
+        <h2 className="sr-only">Product information</h2>
         <Accordion type="multiple" defaultValue={["details"]} className="mt-12 lg:max-w-2xl">
           <AccordionItem value="details">
             <AccordionTrigger>Details and features</AccordionTrigger>

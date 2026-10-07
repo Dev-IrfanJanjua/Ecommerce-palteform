@@ -14,7 +14,9 @@ export default function CollectionLoading() {
       <Container>
         <Skeleton className="h-3 w-32" />
         <Skeleton className="mt-6 h-10 w-64" />
-        <Skeleton className="mt-3 h-4 w-96" />
+        {/* max-w-full, not a bare w-96: 24rem is 384px, which is wider than a
+            375px viewport and made the loading state scroll sideways. */}
+        <Skeleton className="mt-3 h-4 w-96 max-w-full" />
 
         <div className="mt-10 lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10">
           <div className="hidden space-y-4 lg:block">
