@@ -116,10 +116,29 @@ rounded to the same natural endings.
 
 ### Images
 
-**Generated SVG placeholders** in the brand colors. No licensing concerns, no API
-keys, deterministic, and they look intentional rather than broken.
-Path convention stays `/images/products/{slug}/{colorSlug}-{1..4}.webp` so
-dropping in real photos later needs no code change.
+**Unsplash stock photography** (changed 2026-10-07, at Irfan's request — the
+SVG placeholders were judged distractingly fake).
+
+- Fetched with `npm run images:fetch` into
+  `src/data/product-images.generated.json`
+- Needs `UNSPLASH_ACCESS_KEY` in `frontend/.env.local` (gitignored)
+- URLs are **hotlinked** from Unsplash's CDN, not downloaded: their API
+  Guidelines require this, and it keeps ~150 binaries out of git
+- Photographer + Unsplash attribution is rendered on every product page. This
+  is a **licence obligation**, not decoration — do not remove it while
+  Unsplash photography is in use.
+- Rate limit is 50 requests/hour on a demo application. The script makes one
+  request per product and is resumable.
+
+> **Known limitation, accepted knowingly.** These are stock photos of real
+> shoes, not photographs of these products. They do **not** match a product's
+> colourway — a shoe listed as "Sand" may show a grey photo, and all four views
+> of a product may be the same shoe. This is inherent to stock photography and
+> was flagged before the decision. Replace with real product photography before
+> this is a real shop.
+
+The SVG silhouettes remain as the fallback: a product with no photo data never
+shows a broken image.
 
 ---
 

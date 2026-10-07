@@ -19,10 +19,12 @@ import { ProductImage } from "./product-image";
 export function ProductGallery({
   color,
   productName,
+  productSlug,
   collection,
 }: {
   color: ColorOption;
   productName: string;
+  productSlug: string;
   collection: string;
 }) {
   const [active, setActive] = useState(0);
@@ -39,10 +41,10 @@ export function ProductGallery({
             <li key={src} className="w-[82vw] shrink-0 snap-center">
               <div className="bg-surface rounded-image relative aspect-4/5 overflow-hidden">
                 <ProductImage
-                  src={src}
                   alt={`${productName}, ${color.name}, view ${index + 1}`}
                   hex={color.hex}
                   collection={collection}
+                  productSlug={productSlug}
                   view={index + 1}
                   priority={index === 0}
                   sizes="82vw"
@@ -70,10 +72,10 @@ export function ProductGallery({
               >
                 <div className="bg-surface relative aspect-4/5">
                   <ProductImage
-                    src={src}
                     alt=""
                     hex={color.hex}
                     collection={collection}
+                    productSlug={productSlug}
                     view={index + 1}
                     sizes="5rem"
                   />
@@ -85,10 +87,10 @@ export function ProductGallery({
 
         <div className="bg-surface rounded-image relative aspect-4/5 overflow-hidden">
           <ProductImage
-            src={color.images[active]}
             alt={`${productName}, ${color.name}, view ${active + 1}`}
             hex={color.hex}
             collection={collection}
+            productSlug={productSlug}
             view={active + 1}
             priority
             sizes="(max-width: 1024px) 100vw, 45vw"

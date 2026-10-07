@@ -285,7 +285,6 @@ export default function DesignSystemPage() {
             <figure key={collection.slug}>
               <div className="rounded-image bg-surface relative aspect-4/5 overflow-hidden">
                 <ProductImage
-                  src=""
                   alt={`${collection.name} placeholder`}
                   hex={sampleHex}
                   collection={collection.slug}
@@ -306,7 +305,6 @@ export default function DesignSystemPage() {
             <figure key={color.name}>
               <div className="rounded-image bg-surface relative aspect-4/5 overflow-hidden">
                 <ProductImage
-                  src=""
                   alt={`Sneaker in ${color.name}`}
                   hex={color.hex}
                   collection="sneakers"

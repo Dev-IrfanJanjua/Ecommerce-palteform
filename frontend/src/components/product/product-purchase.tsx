@@ -4,6 +4,9 @@ import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
+import { addItem } from "@/features/cart/cart-slice";
+import { openCartDrawer } from "@/features/ui/ui-slice";
+import { useAppDispatch } from "@/store/hooks";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ProductGallery } from "./product-gallery";
@@ -37,6 +40,7 @@ export function ProductPurchase({
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
+  const dispatch = useAppDispatch();
 
   const colorFromUrl = params.get("color");
   const initialColor = product.colors.find((c) => c.slug === colorFromUrl) ?? product.colors[0];
@@ -79,17 +83,46 @@ export function ProductPurchase({
       setShowSizeError(true);
       return;
     }
-    // The cart slice and drawer arrive in the next phase.
+
+    const variant = product.variants.find((v) => v.colorSlug === colorSlug && v.size === size);
+    if (!variant || variant.stock === 0) return;
+
+    // The price is copied in at this moment. The cart must not silently
+    // re-price itself if the catalogue changes underneath it.
+    dispatch(
+      addItem({
+        sku: variant.sku,
+        productId: product.id,
+        slug: product.slug,
+        name: product.name,
+        colorName: color.name,
+        colorSlug: color.slug,
+        colorHex: color.hex,
+        collection: product.collection,
+        size,
+        unitPriceCents: product.priceCents,
+        image: color.images[0],
+        quantity,
+        maxStock: variant.stock,
+      }),
+    );
+
     toast.success(`${product.name} added`, {
       description: `${color.name} · EU ${size} · Qty ${quantity}`,
     });
+    dispatch(openCartDrawer());
   }
 
   const maxForVariant = Math.min(selectedStock || MAX_QUANTITY, MAX_QUANTITY);
 
   return (
     <div className="lg:grid lg:grid-cols-2 lg:gap-12">
-      <ProductGallery color={color} productName={product.name} collection={product.collection} />
+      <ProductGallery
+        color={color}
+        productName={product.name}
+        productSlug={product.slug}
+        collection={product.collection}
+      />
 
       <div className="mt-8 lg:mt-0">
         {details}
