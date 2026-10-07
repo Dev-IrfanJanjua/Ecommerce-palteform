@@ -1,41 +1,37 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/common/section";
 import { ShoeSilhouette } from "@/components/product/shoe-shapes";
+import { getCollectionPhoto, photoUrl } from "@/lib/product-photos";
 import type { Collection } from "@/types/catalog";
 
 /**
  * Collection tiles.
  *
- * The first version used six identical navy gradients, which told the shopper
- * nothing and read as placeholder filler. Each tile now shows that
- * collection's own silhouette, so "Boots" looks like a boot — the tile does
- * the job an photograph would, and is obviously an illustration rather than a
- * failed image.
+ * Each tile shows a real photograph of that kind of shoe, darkened by the
+ * `--hero-overlay` scrim so the white label stays readable over any image.
  *
- * Tints are drawn from theme tokens with varying mix ratios, so a palette
- * change still restyles them.
+ * If a collection has no photo data the tile falls back to its silhouette on a
+ * gradient, so a tile is never empty.
  */
-const TILE_STYLES = [
-  { from: "var(--primary)", to: "var(--foreground)", shoe: 0.26 },
-  { from: "var(--foreground)", to: "var(--primary)", shoe: 0.3 },
-  { from: "var(--primary)", to: "var(--foreground)", shoe: 0.22 },
-  { from: "var(--foreground)", to: "var(--primary)", shoe: 0.34 },
-  { from: "var(--primary)", to: "var(--foreground)", shoe: 0.3 },
-  { from: "var(--foreground)", to: "var(--primary)", shoe: 0.24 },
+const TILE_TINTS = [
+  "var(--primary), var(--foreground)",
+  "var(--foreground), var(--primary)",
+  "var(--primary), var(--foreground)",
+  "var(--foreground), var(--primary)",
+  "var(--primary), var(--foreground)",
+  "var(--foreground), var(--primary)",
 ];
 
-/** Monochrome paint so the tile shoe reads as a graphic, not a product. */
-function tilePaint(id: string) {
-  return {
-    upper: "var(--primary-foreground)",
-    sole: "var(--primary-foreground)",
-    midsole: "var(--primary-foreground)",
-    panel: "var(--primary-foreground)",
-    line: "var(--primary-foreground)",
-    gradientId: id,
-  };
-}
+const FALLBACK_PAINT = (id: string) => ({
+  upper: "var(--primary-foreground)",
+  sole: "var(--primary-foreground)",
+  midsole: "var(--primary-foreground)",
+  panel: "var(--primary-foreground)",
+  line: "var(--primary-foreground)",
+  gradientId: id,
+});
 
 export function CollectionTiles({ collections }: { collections: Collection[] }) {
   return (
@@ -47,8 +43,7 @@ export function CollectionTiles({ collections }: { collections: Collection[] }) 
 
       <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         {collections.map((collection, index) => {
-          const style = TILE_STYLES[index % TILE_STYLES.length];
-          const gradientId = `tile-${collection.slug}`;
+          const photo = getCollectionPhoto(collection.slug);
 
           return (
             <li key={collection.slug}>
@@ -59,23 +54,37 @@ export function CollectionTiles({ collections }: { collections: Collection[] }) 
                    the page background and disappears entirely. */
                 className="group focus-visible:ring-ring rounded-image relative isolate flex aspect-4/3 flex-col justify-end overflow-hidden p-5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               >
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-20"
-                  style={{ backgroundImage: `linear-gradient(135deg, ${style.from}, ${style.to})` }}
-                />
+                {photo ? (
+                  <Image
+                    src={photoUrl(photo, 800)}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
+                    className="-z-20 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <>
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0 -z-20"
+                      style={{
+                        backgroundImage: `linear-gradient(135deg, ${TILE_TINTS[index % TILE_TINTS.length]})`,
+                      }}
+                    />
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 400 500"
+                      className="pointer-events-none absolute -right-6 -bottom-16 -z-10 h-[150%] w-auto opacity-25"
+                    >
+                      <ShoeSilhouette
+                        collection={collection.slug}
+                        paint={FALLBACK_PAINT(`tile-${collection.slug}`)}
+                      />
+                    </svg>
+                  </>
+                )}
 
-                {/* The collection's own shoe, oversized and bleeding off the
-                    tile so it reads as artwork rather than a product shot. */}
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 400 500"
-                  className="pointer-events-none absolute -right-6 -bottom-16 -z-10 h-[150%] w-auto transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3"
-                  style={{ opacity: style.shoe }}
-                >
-                  <ShoeSilhouette collection={collection.slug} paint={tilePaint(gradientId)} />
-                </svg>
-
+                {/* Scrim: keeps the label readable over any photograph. */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 -z-10"

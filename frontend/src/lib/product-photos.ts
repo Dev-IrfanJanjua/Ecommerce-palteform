@@ -1,4 +1,5 @@
 import photoData from "@/data/product-images.generated.json";
+import { buildCatalog } from "@/data/catalog";
 
 /**
  * Real product photography, sourced from Unsplash.
@@ -62,4 +63,19 @@ export function creditLinks(photo: ProductPhoto) {
     unsplash: `https://unsplash.com${UTM}`,
     photo: `${photo.unsplashUrl}${UTM}`,
   };
+}
+
+/**
+ * A representative photo for a collection tile — the first photo of the first
+ * product in that collection, so the tile shows the kind of shoe it links to.
+ */
+export function getCollectionPhoto(collectionSlug: string): ProductPhoto | undefined {
+  const product = buildCatalog().find((p) => p.collection === collectionSlug);
+  return product ? getProductPhoto(product.slug, 0) : undefined;
+}
+
+/** Hero image: the first featured product's photo. */
+export function getHeroPhoto(): ProductPhoto | undefined {
+  const featured = buildCatalog().find((p) => p.isFeatured) ?? buildCatalog()[0];
+  return featured ? getProductPhoto(featured.slug, 1) : undefined;
 }

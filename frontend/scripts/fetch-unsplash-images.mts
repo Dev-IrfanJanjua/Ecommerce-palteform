@@ -142,9 +142,22 @@ async function main() {
         continue;
       }
 
-      // Four distinct photos per product, cycling if the page returned fewer.
+      // Four photos per product, de-duplicated by id. An index formula alone
+      // can land on the same photo twice, which looks like a broken gallery.
+      const seen = new Set<string>();
+      const picked: typeof results = [];
+      for (let offset = 0; offset < results.length && picked.length < 4; offset++) {
+        const r = results[(offset + index) % results.length];
+        if (seen.has(r.id)) continue;
+        seen.add(r.id);
+        picked.push(r);
+      }
+      // If the page genuinely had fewer than 4, repeat to fill rather than fail.
+      while (picked.length < 4 && picked.length > 0)
+        picked.push(picked[picked.length % picked.length]);
+
       images[slug] = Array.from({ length: 4 }, (_, i) => {
-        const r = results[(i * 2 + index) % results.length];
+        const r = picked[i % picked.length];
         return {
           id: r.id,
           url: r.urls.raw,
