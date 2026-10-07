@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  images: {
+    // Product photography is hotlinked from Unsplash's CDN, which their API
+    // guidelines require (storing copies is not permitted).
+    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+  },
 };
 
 export default nextConfig;

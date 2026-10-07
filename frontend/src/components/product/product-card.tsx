@@ -47,10 +47,10 @@ export function ProductCard({
             )}
           >
             <ProductImage
-              src={primary.images[0]}
               alt={`${product.name}, ${primary.name}, view 1`}
               hex={primary.hex}
               collection={product.collection}
+              productSlug={product.slug}
               view={1}
               priority={priority}
             />
@@ -59,10 +59,10 @@ export function ProductCard({
           {/* Hover image — only revealed on devices with a real pointer. */}
           <div className="hover-hover:group-hover:opacity-100 absolute inset-0 opacity-0 transition-opacity duration-300">
             <ProductImage
-              src={secondary.images[1] ?? secondary.images[0]}
               alt=""
               hex={secondary.hex}
               collection={product.collection}
+              productSlug={product.slug}
               view={2}
             />
           </div>

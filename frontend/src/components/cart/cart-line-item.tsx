@@ -30,10 +30,10 @@ export function CartLineItem({ item, onNavigate }: { item: CartItem; onNavigate?
         className="bg-surface rounded-image relative aspect-4/5 w-20 shrink-0 overflow-hidden"
       >
         <ProductImage
-          src={item.image}
           alt={`${item.name}, ${item.colorName}`}
           hex={item.colorHex}
           collection={item.collection}
+          productSlug={item.slug}
           sizes="5rem"
         />
       </Link>

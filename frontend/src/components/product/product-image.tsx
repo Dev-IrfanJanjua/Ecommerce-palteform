@@ -1,21 +1,23 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { getProductPhoto, photoUrl } from "@/lib/product-photos";
 import { ShoeSilhouette, type ShoePaint } from "./shoe-shapes";
 
 /**
  * PRODUCT IMAGE
  *
- * Real photography does not exist yet, so this draws a deterministic SVG
- * placeholder: the silhouette for the product's collection, painted in that
- * colourway's own hex.
+ * Uses real photography from Unsplash when a product has it (see
+ * src/lib/product-photos.ts), and falls back to a deterministic SVG silhouette
+ * painted in the colourway's hex when it does not.
  *
- * Why inline SVG rather than ~400 placeholder binaries in git: no 404s, no
- * broken-image flashes, and the grid reads as a real catalogue while layout is
- * being reviewed. When real photos land, drop them at the paths the catalog
- * already generates (`/images/products/{slug}/{colorSlug}-{n}.webp`) and flip
- * HAS_REAL_PHOTOS — every caller already passes the correct `src`.
+ * The fallback is kept deliberately: it means a product with no photo never
+ * shows a broken image, and it is what the store reverts to if the generated
+ * photo data is removed.
+ *
+ * CAVEAT: stock photos do not match a product's colourway — a shoe listed as
+ * "Sand" may show a grey photo. Real product photography replaces this by
+ * regenerating with actual assets.
  */
-const HAS_REAL_PHOTOS = false;
 
 /** Mixes a hex colour towards white (amount > 0) or black (amount < 0). */
 function shade(hex: string, amount: number): string {
@@ -54,12 +56,13 @@ function buildPaint(hex: string, gradientId: string): ShoePaint {
 }
 
 interface ProductImageProps {
-  src: string;
   alt: string;
   /** The colourway's hex — product data, which is why a literal is fine here. */
   hex: string;
   /** Picks the silhouette: sneakers, running, boots, formal, sandals, training. */
   collection: string;
+  /** When given and photo data exists, a real photograph is used instead. */
+  productSlug?: string;
   /** 1-4. Slight angle and scale changes so a gallery is not four identical views. */
   view?: number;
   className?: string;
@@ -68,23 +71,28 @@ interface ProductImageProps {
 }
 
 export function ProductImage({
-  src,
   alt,
   hex,
   collection,
+  productSlug,
   view = 1,
   className,
   sizes = "(max-width: 768px) 50vw, 25vw",
   priority = false,
 }: ProductImageProps) {
-  if (HAS_REAL_PHOTOS) {
+  // `productSlug` is optional so existing callers keep working; without it
+  // (or without photo data) the SVG silhouette is used.
+  const photo = productSlug ? getProductPhoto(productSlug, view - 1) : undefined;
+
+  if (photo) {
     return (
       <Image
-        src={src}
+        src={photoUrl(photo, 800)}
         alt={alt}
         fill
         sizes={sizes}
         priority={priority}
+        placeholder={photo.blurHash ? undefined : "empty"}
         className={cn("object-cover", className)}
       />
     );

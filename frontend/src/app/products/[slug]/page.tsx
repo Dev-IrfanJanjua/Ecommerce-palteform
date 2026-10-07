@@ -15,6 +15,7 @@ import { PriceTag } from "@/components/product/price-tag";
 import { ProductBadges } from "@/components/product/product-badges";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductPurchase } from "@/components/product/product-purchase";
+import { PhotoCredit } from "@/components/product/photo-credit";
 import { brand } from "@/config/brand";
 import { buildCatalog, GENDER_LABELS } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
@@ -154,6 +155,8 @@ export default async function ProductPage({ params }: PageProps) {
 
         <div className="mt-8">
           <ProductPurchase product={product} details={details} />
+          {/* Unsplash licence requirement — see components/product/photo-credit */}
+          <PhotoCredit productSlug={product.slug} />
         </div>
 
         {/* Delivery and returns — numbers read from brand config so they can

@@ -117,7 +117,12 @@ export function ProductPurchase({
 
   return (
     <div className="lg:grid lg:grid-cols-2 lg:gap-12">
-      <ProductGallery color={color} productName={product.name} collection={product.collection} />
+      <ProductGallery
+        color={color}
+        productName={product.name}
+        productSlug={product.slug}
+        collection={product.collection}
+      />
 
       <div className="mt-8 lg:mt-0">
         {details}
