@@ -2,10 +2,11 @@
 
 import { useSyncExternalStore } from "react";
 import Link from "next/link";
-import { ShoppingBag, User } from "lucide-react";
+import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/common/container";
 import { MobileMenu } from "./mobile-menu";
+import { CartButton } from "@/components/cart/cart-button";
 import { brand } from "@/config/brand";
 import { cn } from "@/lib/utils";
 
@@ -104,12 +105,7 @@ export function Header() {
               </Link>
             </Button>
 
-            {/* The cart drawer and its live item count arrive with the cart
-                phase. Until then this is a labelled placeholder rather than a
-                button that silently does nothing. */}
-            <Button variant="ghost" size="icon" aria-label="Cart (empty)" disabled>
-              <ShoppingBag className="size-5" aria-hidden="true" />
-            </Button>
+            <CartButton />
           </div>
         </div>
       </Container>
