@@ -12,7 +12,9 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "validate:catalog": "tsx scripts/validate-catalog.ts",
-    "images:fetch": "tsx --env-file=.env.local scripts/fetch-unsplash-images.mts"
+    "images:fetch": "tsx --env-file=.env.local scripts/fetch-unsplash-images.mts",
+    "audit:pages": "tsx scripts/audit-pages.mts",
+    "audit:responsive": "tsx scripts/audit-responsive.mts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

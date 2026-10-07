@@ -30,6 +30,16 @@ function shade(hex: string, amount: number): string {
     .padStart(6, "0")}`;
 }
 
+/** Small deterministic string hash, for building unique-but-stable SVG ids. */
+function hashString(input: string): string {
+  let h = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(36);
+}
+
 /** Perceived brightness, so pale shoes still get visible shading. */
 function isLight(hex: string): boolean {
   const n = parseInt(hex.replace("#", ""), 16);
@@ -98,9 +108,11 @@ export function ProductImage({
     );
   }
 
-  // Deterministic id: identical inputs produce an identical gradient, so
-  // repeated ids across the page are the same definition, not a conflict.
-  const gradientId = `shoe-${collection}-${hex.replace("#", "")}-${view}`;
+  // SVG gradient ids must be unique within a document: a repeat makes the
+  // markup invalid and the browser resolves every url(#id) to the first match.
+  // `alt` is unique per instance (it names the product and view) and is
+  // deterministic, so hashing it keeps server and client output identical.
+  const gradientId = `shoe-${collection}-${hex.replace("#", "")}-${view}-${hashString(alt)}`;
   const paint = buildPaint(hex, gradientId);
 
   const angles = [-4, -11, 3, -7];
