@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { cartHydrated, cartStateSchema } from "@/features/cart/cart-slice";
+import { storeHydrated } from "@/features/ui/ui-slice";
 import { makeStore, type AppStore } from "./index";
 
 const STORAGE_KEY = "qadam:cart";
@@ -42,6 +43,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       }
     } catch {
       // Private browsing, blocked storage or corrupt JSON — start empty.
+    } finally {
+      // Marked either way: a failed read is still a completed attempt, and the
+      // UI must stop waiting.
+      store.dispatch(storeHydrated());
     }
 
     // --- Save ---------------------------------------------------------------
