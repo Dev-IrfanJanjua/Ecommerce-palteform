@@ -54,6 +54,27 @@
     text-transform: var(--heading-transform);
   }
 
+  /* Interactive elements get a pointer cursor.
+     Browsers default <button> to `cursor: default`, and current shadcn/ui no
+     longer adds `cursor-pointer` (it is opt-in at init via --pointer). Without
+     this, every button and icon control on the site feels unclickable.
+     :disabled is excluded so a dead control does not invite a click. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  summary,
+  select:not(:disabled),
+  [type="checkbox"]:not(:disabled),
+  [type="radio"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   /* Respect the OS "reduce motion" setting. Accessibility baseline. */
   @media (prefers-reduced-motion: reduce) {
     *,

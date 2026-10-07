@@ -1,30 +1,48 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/common/container";
 import { brand } from "@/config/brand";
+import { getHeroPhoto, photoUrl } from "@/lib/product-photos";
 
 /**
  * Hero.
  *
- * No photography exists yet, so the backdrop is a token-built gradient rather
- * than a missing <img>. The `--hero-overlay` scrim is already applied over it,
- * so dropping a real photograph in later means swapping the background layer
- * and nothing else — the text contrast treatment is already correct.
+ * The backdrop is a real photograph with the `--hero-overlay` scrim over it,
+ * which is what keeps the white headline readable regardless of how light the
+ * image happens to be. Falls back to a token gradient if there is no photo
+ * data, so the hero is never blank.
  */
 export function Hero() {
+  const photo = getHeroPhoto();
+
   return (
     <section className="relative isolate overflow-hidden">
       {/* Backdrop */}
-      <div
-        aria-hidden="true"
-        className="from-primary via-primary to-foreground absolute inset-0 -z-20 bg-gradient-to-br"
-      />
+      {photo ? (
+        <Image
+          src={photoUrl(photo, 1920)}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-20 object-cover"
+        />
+      ) : (
+        <div
+          aria-hidden="true"
+          className="from-primary via-primary to-foreground absolute inset-0 -z-20 bg-gradient-to-br"
+        />
+      )}
       {/* Scrim — the same token a real photo would sit under. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10"
         style={{ backgroundImage: "var(--hero-overlay)" }}
       />
+      {/* A photograph needs more than the standard scrim for the headline to
+          clear contrast on its lighter areas. */}
+      <div aria-hidden="true" className="bg-foreground/45 absolute inset-0 -z-10" />
 
       <Container>
         <div className="py-section lg:py-section-lg flex min-h-[32rem] max-w-2xl flex-col justify-center lg:min-h-[38rem]">
