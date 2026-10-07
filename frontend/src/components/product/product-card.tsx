@@ -50,6 +50,7 @@ export function ProductCard({
               src={primary.images[0]}
               alt={`${product.name}, ${primary.name}, view 1`}
               hex={primary.hex}
+              collection={product.collection}
               view={1}
               priority={priority}
             />
@@ -61,6 +62,7 @@ export function ProductCard({
               src={secondary.images[1] ?? secondary.images[0]}
               alt=""
               hex={secondary.hex}
+              collection={product.collection}
               view={2}
             />
           </div>
