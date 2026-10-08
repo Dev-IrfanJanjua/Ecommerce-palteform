@@ -85,7 +85,21 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<Api
   } catch (cause) {
     // A network failure is not an HTTP status — distinguish it so the UI can
     // say "cannot reach the server" rather than inventing a code.
-    throw new ApiError(0, "Could not reach the API", cause);
+    //
+    // ECONNREFUSED specifically means nothing is listening, which in practice
+    // is almost always "the backend was not started". Saying so — and naming
+    // the command — beats leaving a stack trace for someone to decode.
+    const refused = String((cause as { cause?: { code?: string } })?.cause?.code ?? "").includes(
+      "ECONNREFUSED",
+    );
+
+    throw new ApiError(
+      0,
+      refused
+        ? `The API is not running at ${BASE_URL}. Start both servers with: npm run dev:all`
+        : `Could not reach the API at ${BASE_URL}`,
+      cause,
+    );
   }
 
   let body: SuccessEnvelope<T> | ErrorEnvelope;
