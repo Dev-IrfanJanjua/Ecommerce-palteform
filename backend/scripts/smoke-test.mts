@@ -70,8 +70,29 @@ check(
 );
 
 const ready = await fetch(`${base}/health/ready`);
-check("GET /health/ready -> 200", ready.status === 200, ready.status);
-check("lists dependency checks", "checks" in (await ready.clone().json()).data);
+const readyBody = await ready.json();
+check("lists dependency checks", "checks" in readyBody.data, readyBody);
+
+/**
+ * Readiness asserts the CONTRACT, not a fixed status code.
+ *
+ * This process never calls connectDatabase(), so when MONGODB_URI is set the
+ * correct answer is 503 "not ready" — a configured-but-unreachable dependency
+ * means this instance should not take traffic. With no URI at all the API is
+ * allowed to run in a degraded mode, which is 200.
+ */
+const dbStatus = readyBody.data?.checks?.database;
+const expectedStatus = dbStatus === "connected" || dbStatus === "not configured" ? 200 : 503;
+check(
+  `readiness reports database "${dbStatus}" with status ${expectedStatus}`,
+  ready.status === expectedStatus,
+  { status: ready.status, dbStatus },
+);
+check(
+  "a configured-but-unreachable database is NOT ready",
+  dbStatus !== "disconnected" || ready.status === 503,
+  { status: ready.status, dbStatus },
+);
 
 /* -------------------------------------------------------------------------- */
 section("Security headers");

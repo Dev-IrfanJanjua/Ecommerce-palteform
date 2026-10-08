@@ -17,9 +17,9 @@ import { ProductCard } from "@/components/product/product-card";
 import { ProductPurchase } from "@/components/product/product-purchase";
 import { PhotoCredit } from "@/components/product/photo-credit";
 import { brand } from "@/config/brand";
-import { buildCatalog, GENDER_LABELS } from "@/data/catalog";
+import { GENDER_LABELS } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
-import { getProductBySlug, getRelatedProducts, isSoldOut } from "@/lib/api/products";
+import { getProductBySlug, getProducts, getRelatedProducts, isSoldOut } from "@/lib/api/products";
 
 /**
  * Product detail page.
@@ -29,9 +29,16 @@ import { getProductBySlug, getRelatedProducts, isSoldOut } from "@/lib/api/produ
  * size, quantity) is a client component.
  */
 
-/** Pre-renders all 36 product routes at build time. */
+/**
+ * Pre-renders every product route at build time, from the API.
+ *
+ * This means the backend must be reachable during `next build` — which is
+ * correct: prerendering from a local copy could generate pages for products
+ * the database does not have, or miss ones it does.
+ */
 export async function generateStaticParams() {
-  return buildCatalog().map((product) => ({ slug: product.slug }));
+  const { items } = await getProducts({ limit: 100 });
+  return items.map((product) => ({ slug: product.slug }));
 }
 
 /** The catalogue is a closed set, so unknown slugs 404 at the router — which
@@ -63,7 +70,7 @@ export default async function ProductPage({ params }: PageProps) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = await getRelatedProducts(product.id, 4);
+  const related = await getRelatedProducts(product.slug, 4);
   const soldOut = isSoldOut(product);
 
   /**
