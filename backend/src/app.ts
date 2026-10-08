@@ -10,6 +10,8 @@ import { requestId } from "@/common/middleware/request-id";
 import { notFoundHandler } from "@/common/middleware/not-found";
 import { errorHandler } from "@/common/middleware/error-handler";
 import { healthRoutes } from "@/modules/health/health.routes";
+import { productRoutes } from "@/modules/products/product.routes";
+import { collectionRoutes } from "@/modules/collections/collection.routes";
 
 export const API_PREFIX = "/api/v1";
 
@@ -87,6 +89,8 @@ export function createApp(): Express {
 
   // --- Routes --------------------------------------------------------------
   app.use(`${API_PREFIX}/health`, healthRoutes);
+  app.use(`${API_PREFIX}/products`, productRoutes);
+  app.use(`${API_PREFIX}/collections`, collectionRoutes);
 
   // --- Tail ----------------------------------------------------------------
   // Both must stay last, and in this order: anything unmatched becomes a 404,
