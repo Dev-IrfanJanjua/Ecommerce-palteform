@@ -19,13 +19,25 @@ Requires **Node 18.18+** (built on 22.18).
 
 ```bash
 npm install
-npm run dev
+npm run dev:all
 ```
 
 Open **http://localhost:3000**.
 
-> `npm install` at the root installs only the git hooks. The first `npm run dev`
-> will need `npm install` inside `frontend/` too if you have not run it yet.
+> **Use `dev:all`, not `dev`.** Since the products API landed, the storefront
+> fetches its data from the backend — `npm run dev` starts only the frontend,
+> and every page then fails with "Could not reach the API". `dev:all` runs both
+> and stops both together.
+
+### If the app behaves strangely
+
+Next's dev server survives a terminal being closed, so an old one can keep
+serving pre-merge code on port 3000 — its devtools badge shows **(stale)**.
+That produces errors which do not match the code you are reading. Clear it:
+
+```bash
+pkill -f next && npm run dev:clean
+```
 
 ### Commands
 
@@ -33,7 +45,10 @@ All of these work from the repository root.
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Development server with hot reload |
+| `npm run dev:all` | **Start here** — frontend and API together |
+| `npm run dev:clean` | Same, after deleting the Next.js cache |
+| `npm run dev` | Frontend only (needs the API running separately) |
+| `npm run backend:dev` | API only |
 | `npm run build` | Production build |
 | `npm start` | Serve the production build (run `build` first) |
 | `npm run verify` | **Everything**: format, lint, types, catalog, build |
@@ -145,7 +160,7 @@ These are deliberate and recorded, not oversights.
 | **Product photos do not match colourways** | Unsplash stock photography. A shoe listed as "Sand" may show a grey photo. Replace with real product photography before this is a real shop. |
 | **No payment processing** | Checkout validates and confirms, but takes no money. Stripe arrives at blueprint Step 8. |
 | **No accounts** | Guest checkout only. The account icon links nowhere until auth exists. |
-| **No backend** | Data is local. Nothing persists beyond this browser. |
+| **The API is required** | The storefront no longer falls back to local data. `npm run build` also needs the API running, because product routes are prerendered from it. |
 | **Brand name is a placeholder** | "Qadam" has not been checked against trademark registries. |
 | **Stripe and Pakistan** | Stripe does not onboard merchants in Pakistan or settle PKR. Test mode works, so the project is unaffected; taking real money would need a local gateway. |
 
