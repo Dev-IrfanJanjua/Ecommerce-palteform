@@ -1,4 +1,5 @@
 import type { ValidatedRequest } from "@/common/middleware/validate";
+import type { Role } from "@/modules/users/user.model";
 
 /**
  * Augments Express's Request with the fields this app attaches.
@@ -13,6 +14,12 @@ declare global {
       id: string;
       /** Output of validate(); present only on routes that use it. */
       validated?: ValidatedRequest;
+      /**
+       * Set by the authenticate middleware from a VERIFIED token.
+       * Optional because public routes have no user — handlers behind
+       * authenticate can rely on it, and TypeScript makes the rest check.
+       */
+      user?: { id: string; role: Role };
     }
   }
 }

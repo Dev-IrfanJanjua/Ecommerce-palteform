@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType, type HydratedDocument } from "mongoose";
+import { Schema, model, type InferSchemaType, type HydratedDocument, models, type Model } from "mongoose";
 
 /**
  * PRODUCT MODEL
@@ -153,4 +153,13 @@ productSchema.index(
 export type ProductDoc = InferSchemaType<typeof productSchema>;
 export type ProductHydrated = HydratedDocument<ProductDoc>;
 
-export const Product = model("Product", productSchema);
+/**
+ * Registered idempotently.
+ *
+ * mongoose.model() throws OverwriteModelError if the same name is registered
+ * twice, which happens whenever one module is loaded through two different
+ * specifiers (an "@/" alias and a relative path resolve to separate module
+ * instances), and on every hot reload in dev. Reusing an existing model is
+ * both safe and what callers expect.
+ */
+export const Product = (models.Product as Model<InferSchemaType<typeof productSchema>>) ?? model("Product", productSchema);

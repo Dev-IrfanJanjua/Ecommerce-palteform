@@ -47,6 +47,24 @@ const envSchema = z.object({
   /** Database name, when not already part of the URI. */
   MONGODB_DB_NAME: z.string().trim().min(1).default("qadam"),
 
+  /**
+   * JWT secrets. Access and refresh MUST be different values: if they were
+   * shared, an access token would be accepted as a refresh token, and a
+   * 15-minute compromise would become a 7-day one.
+   *
+   * 32 characters minimum. Generate with:
+   *   node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"
+   */
+  JWT_ACCESS_SECRET: z.string().min(32, "must be at least 32 characters"),
+  JWT_REFRESH_SECRET: z.string().min(32, "must be at least 32 characters"),
+
+  ACCESS_TOKEN_TTL: z.string().trim().default("15m"),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(7),
+
+  /** Attempts allowed per IP per window on login / register. */
+  AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
+  AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
+
   /** Requests allowed per IP per window. */
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(300),
@@ -59,6 +77,16 @@ const parsed = envSchema
         code: "custom",
         path: ["MONGODB_URI"],
         message: "is required in production",
+      });
+    }
+    // Reusing one secret for both token types collapses the whole point of
+    // having two: a stolen 15-minute access token would be usable as a
+    // 7-day refresh token.
+    if (value.JWT_ACCESS_SECRET === value.JWT_REFRESH_SECRET) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["JWT_REFRESH_SECRET"],
+        message: "must be different from JWT_ACCESS_SECRET",
       });
     }
   })
