@@ -11,7 +11,8 @@
     "seed": "tsx scripts/seed.mts",
     "db:check": "tsx scripts/check-models.mts",
     "api:test": "tsx scripts/api-test.mts",
-    "auth:test": "AUTH_RATE_LIMIT_MAX=500 tsx scripts/auth-test.mts"
+    "auth:test": "AUTH_RATE_LIMIT_MAX=500 tsx scripts/auth-test.mts",
+    "db:ping": "tsx scripts/db-ping.mts"
   },
   "keywords": [],
   "author": "",
