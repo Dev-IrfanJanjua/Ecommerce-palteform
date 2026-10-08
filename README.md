@@ -6,6 +6,7 @@ background jobs, testing, security, Docker, CI/CD, deployment and monitoring.
 
 **Status:** frontend complete (blueprint Step 1). Backend begins at Step 2.
 
+- **[Project state](docs/PROJECT-STATE.md) — start here: where things stand, decisions, traps**
 - [Requirements](REQUIREMENTS.md) — the full assignment brief
 - [Learning roadmap](LEARNING-ROADMAP.md) — every tool explained, with docs
 - [Storefront decisions](docs/storefront-decisions.md) — what was chosen and why
@@ -43,22 +44,22 @@ pkill -f next && npm run dev:clean
 
 All of these work from the repository root.
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev:all` | **Start here** — frontend and API together |
-| `npm run dev:clean` | Same, after deleting the Next.js cache |
-| `npm run dev` | Frontend only (needs the API running separately) |
-| `npm run backend:dev` | API only |
-| `npm run build` | Production build |
-| `npm start` | Serve the production build (run `build` first) |
-| `npm run verify` | **Everything**: format, lint, types, catalog, build |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript, no emit |
-| `npm run format` | Rewrite with Prettier |
-| `npm run validate:catalog` | 37 checks on the generated catalog |
-| `npm --prefix frontend run audit:pages` | Accessibility and markup audit (needs the dev server) |
+| Command                                      | What it does                                                |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| `npm run dev:all`                            | **Start here** — frontend and API together                  |
+| `npm run dev:clean`                          | Same, after deleting the Next.js cache                      |
+| `npm run dev`                                | Frontend only (needs the API running separately)            |
+| `npm run backend:dev`                        | API only                                                    |
+| `npm run build`                              | Production build                                            |
+| `npm start`                                  | Serve the production build (run `build` first)              |
+| `npm run verify`                             | **Everything**: format, lint, types, catalog, build         |
+| `npm run lint`                               | ESLint                                                      |
+| `npm run typecheck`                          | TypeScript, no emit                                         |
+| `npm run format`                             | Rewrite with Prettier                                       |
+| `npm run validate:catalog`                   | 37 checks on the generated catalog                          |
+| `npm --prefix frontend run audit:pages`      | Accessibility and markup audit (needs the dev server)       |
 | `npm --prefix frontend run audit:responsive` | Layout-shift and mobile-width checks (needs the dev server) |
-| `npm --prefix frontend run images:fetch` | Refresh product photography from Unsplash |
+| `npm --prefix frontend run images:fetch`     | Refresh product photography from Unsplash                   |
 
 Run `npm run verify` before every commit. A Husky pre-commit hook also formats
 and lints staged files.
@@ -75,14 +76,14 @@ photography.
 
 ## Routes
 
-| Route | What it is |
-| --- | --- |
-| `/` | Home — hero, collections, new arrivals, bestsellers |
+| Route                 | What it is                                                       |
+| --------------------- | ---------------------------------------------------------------- |
+| `/`                   | Home — hero, collections, new arrivals, bestsellers              |
 | `/collections/[slug]` | Collection grid with URL-synced filters (`all` shows everything) |
-| `/products/[slug]` | Product detail with colour, size and stock rules |
-| `/checkout` | Checkout form (UI only — no payment is taken) |
-| `/checkout/success` | Order confirmation |
-| `/design-system` | Every design token on one page |
+| `/products/[slug]`    | Product detail with colour, size and stock rules                 |
+| `/checkout`           | Checkout form (UI only — no payment is taken)                    |
+| `/checkout/success`   | Order confirmation                                               |
+| `/design-system`      | Every design token on one page                                   |
 
 ---
 
@@ -155,14 +156,14 @@ cross-process determinism check.
 
 These are deliberate and recorded, not oversights.
 
-| Limitation | Detail |
-| --- | --- |
-| **Product photos do not match colourways** | Unsplash stock photography. A shoe listed as "Sand" may show a grey photo. Replace with real product photography before this is a real shop. |
-| **No payment processing** | Checkout validates and confirms, but takes no money. Stripe arrives at blueprint Step 8. |
-| **No accounts** | Guest checkout only. The account icon links nowhere until auth exists. |
-| **The API is required** | The storefront no longer falls back to local data. `npm run build` also needs the API running, because product routes are prerendered from it. |
-| **Brand name is a placeholder** | "Qadam" has not been checked against trademark registries. |
-| **Stripe and Pakistan** | Stripe does not onboard merchants in Pakistan or settle PKR. Test mode works, so the project is unaffected; taking real money would need a local gateway. |
+| Limitation                                 | Detail                                                                                                                                                    |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Product photos do not match colourways** | Unsplash stock photography. A shoe listed as "Sand" may show a grey photo. Replace with real product photography before this is a real shop.              |
+| **No payment processing**                  | Checkout validates and confirms, but takes no money. Stripe arrives at blueprint Step 8.                                                                  |
+| **No accounts**                            | Guest checkout only. The account icon links nowhere until auth exists.                                                                                    |
+| **The API is required**                    | The storefront no longer falls back to local data. `npm run build` also needs the API running, because product routes are prerendered from it.            |
+| **Brand name is a placeholder**            | "Qadam" has not been checked against trademark registries.                                                                                                |
+| **Stripe and Pakistan**                    | Stripe does not onboard merchants in Pakistan or settle PKR. Test mode works, so the project is unaffected; taking real money would need a local gateway. |
 
 ---
 
