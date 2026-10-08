@@ -25,7 +25,8 @@
     "dev:clean": "rm -rf frontend/.next && npm run dev:all",
     "backend:auth-test": "npm --prefix backend run auth:test",
     "backend:api-test": "npm --prefix backend run api:test",
-    "backend:ping": "npm --prefix backend run db:ping"
+    "backend:ping": "npm --prefix backend run db:ping",
+    "backend:cart-test": "npm --prefix backend run cart:test"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",

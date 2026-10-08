@@ -14,6 +14,8 @@ import { healthRoutes } from "@/modules/health/health.routes";
 import { authRoutes } from "@/modules/auth/auth.routes";
 import { productRoutes } from "@/modules/products/product.routes";
 import { collectionRoutes } from "@/modules/collections/collection.routes";
+import { cartRoutes } from "@/modules/cart/cart.routes";
+import { wishlistRoutes } from "@/modules/wishlist/wishlist.routes";
 
 export const API_PREFIX = "/api/v1";
 
@@ -97,6 +99,8 @@ export function createApp(): Express {
   app.use(`${API_PREFIX}/auth`, authRoutes);
   app.use(`${API_PREFIX}/products`, productRoutes);
   app.use(`${API_PREFIX}/collections`, collectionRoutes);
+  app.use(`${API_PREFIX}/cart`, cartRoutes);
+  app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
 
   // --- Tail ----------------------------------------------------------------
   // Both must stay last, and in this order: anything unmatched becomes a 404,
