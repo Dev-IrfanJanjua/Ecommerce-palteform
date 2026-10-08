@@ -31,8 +31,8 @@ backend engineer does.
 | 3    | MongoDB and Mongoose             | **Done** — PR #13, Atlas live and seeded                      |
 | 4    | Auth and RBAC                    | **Done** — PR #17                                             |
 | 5    | Products and categories          | **Done** — PR #14, storefront runs on MongoDB                 |
-| 6    | Cart and wishlist                | **Next**                                                      |
-| 7    | Orders and inventory             | Not started                                                   |
+| 6    | Cart and wishlist                | **Done** — server-side cart, PR #19                           |
+| 7    | Orders and inventory             | **Next**                                                      |
 | 8    | Stripe payments and webhooks     | Not started                                                   |
 | 9    | Cloudinary and email             | Not started                                                   |
 | 10   | Admin dashboard                  | Not started                                                   |
@@ -112,6 +112,7 @@ Product photography needs `UNSPLASH_ACCESS_KEY` only if you re-run
 | `npm run backend:seed`      | Seed the catalogue                                               |
 | `npm run backend:api-test`  | 35 products-API checks (needs API + DB)                          |
 | `npm run backend:auth-test` | 49 auth and RBAC checks (needs API + DB)                         |
+| `npm run backend:cart-test` | 55 cart and wishlist checks (needs API + DB)                     |
 | `npm run backend:smoke`     | 36 HTTP skeleton checks                                          |
 | `npm run backend:db-check`  | 22 model checks, no database needed                              |
 | `npm run validate:catalog`  | 38 catalogue checks                                              |
@@ -135,7 +136,7 @@ frontend/ (Next.js 16, React 19, Tailwind 4)
 
 backend/ (Express 5, TypeScript 7, Mongoose 9)
   src/
-    modules/        auth/ users/ products/ collections/ health/
+    modules/        auth/ users/ products/ collections/ cart/ wishlist/ health/
     common/         errors/ middleware/ utils/ logger
     config/         env (Zod-validated), db
     app.ts          builds the app — importable by tests, binds no port
