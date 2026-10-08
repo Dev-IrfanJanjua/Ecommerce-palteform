@@ -20,9 +20,12 @@
     "backend:smoke": "npm --prefix backend run smoke",
     "backend:typecheck": "npm --prefix backend run typecheck",
     "backend:seed": "npm --prefix backend run seed",
-    "backend:db-check": "npm --prefix backend run db:check"
+    "backend:db-check": "npm --prefix backend run db:check",
+    "dev:all": "concurrently --names \"api,web\" --prefix-colors \"blue,magenta\" --kill-others \"npm:backend:dev\" \"npm:dev\"",
+    "dev:clean": "rm -rf frontend/.next && npm run dev:all"
   },
   "devDependencies": {
+    "concurrently": "^10.0.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7"
   }
