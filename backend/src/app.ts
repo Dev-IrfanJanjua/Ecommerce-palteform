@@ -4,12 +4,14 @@ import helmet from "helmet";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
 import pinoHttp from "pino-http";
+import cookieParser from "cookie-parser";
 import { env, isTest } from "@/config/env";
 import { logger } from "@/common/logger";
 import { requestId } from "@/common/middleware/request-id";
 import { notFoundHandler } from "@/common/middleware/not-found";
 import { errorHandler } from "@/common/middleware/error-handler";
 import { healthRoutes } from "@/modules/health/health.routes";
+import { authRoutes } from "@/modules/auth/auth.routes";
 import { productRoutes } from "@/modules/products/product.routes";
 import { collectionRoutes } from "@/modules/collections/collection.routes";
 
@@ -60,6 +62,9 @@ export function createApp(): Express {
   app.use(express.json({ limit: "100kb" }));
   app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 
+  // Required before any route that reads the refresh cookie.
+  app.use(cookieParser());
+
   if (!isTest) {
     app.use(
       pinoHttp({
@@ -89,6 +94,7 @@ export function createApp(): Express {
 
   // --- Routes --------------------------------------------------------------
   app.use(`${API_PREFIX}/health`, healthRoutes);
+  app.use(`${API_PREFIX}/auth`, authRoutes);
   app.use(`${API_PREFIX}/products`, productRoutes);
   app.use(`${API_PREFIX}/collections`, collectionRoutes);
 

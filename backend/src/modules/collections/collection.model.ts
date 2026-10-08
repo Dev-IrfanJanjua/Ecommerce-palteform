@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType, models, type Model } from "mongoose";
 
 /**
  * COLLECTION MODEL (the storefront's six product groupings).
@@ -31,4 +31,13 @@ const collectionSchema = new Schema(
 );
 
 export type CollectionDoc = InferSchemaType<typeof collectionSchema>;
-export const ProductCollection = model("ProductCollection", collectionSchema);
+/**
+ * Registered idempotently.
+ *
+ * mongoose.model() throws OverwriteModelError if the same name is registered
+ * twice, which happens whenever one module is loaded through two different
+ * specifiers (an "@/" alias and a relative path resolve to separate module
+ * instances), and on every hot reload in dev. Reusing an existing model is
+ * both safe and what callers expect.
+ */
+export const ProductCollection = (models.ProductCollection as Model<InferSchemaType<typeof collectionSchema>>) ?? model("ProductCollection", collectionSchema);
