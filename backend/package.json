@@ -7,13 +7,14 @@
     "build": "tsc && tsc-alias",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "smoke": "tsx scripts/smoke-test.mts",
+    "smoke": "NODE_ENV=test tsx scripts/smoke-test.mts",
     "seed": "tsx scripts/seed.mts",
     "db:check": "tsx scripts/check-models.mts",
-    "api:test": "tsx scripts/api-test.mts",
-    "auth:test": "AUTH_RATE_LIMIT_MAX=500 tsx scripts/auth-test.mts",
+    "api:test": "NODE_ENV=test tsx scripts/api-test.mts",
+    "auth:test": "NODE_ENV=test AUTH_RATE_LIMIT_MAX=500 tsx scripts/auth-test.mts",
     "db:ping": "tsx scripts/db-ping.mts",
-    "cart:test": "AUTH_RATE_LIMIT_MAX=500 tsx scripts/cart-test.mts"
+    "cart:test": "NODE_ENV=test AUTH_RATE_LIMIT_MAX=500 tsx scripts/cart-test.mts",
+    "order:test": "NODE_ENV=test AUTH_RATE_LIMIT_MAX=500 tsx scripts/order-test.mts"
   },
   "keywords": [],
   "author": "",

@@ -32,8 +32,8 @@ backend engineer does.
 | 4    | Auth and RBAC                    | **Done** — PR #17                                             |
 | 5    | Products and categories          | **Done** — PR #14, storefront runs on MongoDB                 |
 | 6    | Cart and wishlist                | **Done** — server-side cart, PR #19                           |
-| 7    | Orders and inventory             | **Next**                                                      |
-| 8    | Stripe payments and webhooks     | Not started                                                   |
+| 7    | Orders and inventory             | **Done** — checkout, stock guard, order history, PR #20       |
+| 8    | Stripe payments and webhooks     | **Next**                                                      |
 | 9    | Cloudinary and email             | Not started                                                   |
 | 10   | Admin dashboard                  | Not started                                                   |
 | 11   | Redis caching                    | Not started                                                   |
@@ -113,6 +113,7 @@ Product photography needs `UNSPLASH_ACCESS_KEY` only if you re-run
 | `npm run backend:api-test`  | 35 products-API checks (needs API + DB)                          |
 | `npm run backend:auth-test` | 49 auth and RBAC checks (needs API + DB)                         |
 | `npm run backend:cart-test` | 55 cart and wishlist checks (needs API + DB)                     |
+| `npm run backend:order-test`| 52 checkout, concurrency and order checks (needs API + DB)       |
 | `npm run backend:smoke`     | 36 HTTP skeleton checks                                          |
 | `npm run backend:db-check`  | 22 model checks, no database needed                              |
 | `npm run validate:catalog`  | 38 catalogue checks                                              |
@@ -202,9 +203,10 @@ Deliberate and recorded, not oversights.
 | **Photos do not match colourways** | Unsplash stock photography. A shoe listed as "Sand" may show a grey photo. Attribution is a **licence obligation** — do not remove it.      |
 | **No payment processing**          | Checkout validates and confirms but takes no money.                                                                                         |
 | **Stripe and Pakistan**            | Stripe does not onboard Pakistani merchants or settle PKR. Test mode works, so Step 8 is unaffected; real money would need a local gateway. |
-| **Cart is browser-only**           | Redux + localStorage. Server-side cart is Step 6.                                                                                           |
+| **Cart is browser-only**           | The API cart is live and tested, but the frontend still uses Redux + localStorage and does not call it. Wiring it up needs a frontend auth flow — the largest open gap. |
 | **No email sending**               | Verification and reset tokens are logged in development only.                                                                               |
 | **Brand name unverified**          | "Qadam" has not been checked against trademark registries.                                                                                  |
+| **Transactions mask weak guards**  | Measured, not assumed: inside `session.withTransaction` even a naive read-then-write avoids overselling, because MongoDB raises a write conflict and withTransaction retries the body. The atomic `$gte` filter is still required — without a transaction the naive version oversells. `order-test.mts` tests the guard directly, with no session, so it can actually fail. |
 | **No real test framework**         | The suites are bespoke scripts. Jest, Supertest, Vitest and Playwright arrive at Step 14.                                                   |
 
 ---
@@ -247,10 +249,14 @@ Each cost real debugging time.
 
 ## Picking up next
 
-**Step 6 — cart and wishlist on the server.** Per-user cart in MongoDB behind
-`authenticate`, with ownership checks so one customer can never read another's
-cart. The first module where authorization, not just authentication, does real
-work, and where the frontend's Redux cart starts syncing to the server.
+**Step 8 — Stripe payments and webhooks.** Orders are created as `pending` and
+move to `paid` only when Stripe says so, via a signed webhook — never from the
+browser, which can lie. Stripe test mode works from Pakistan; real settlement
+does not (see Known limitations).
+
+Before that, the biggest open gap is the frontend: the cart and order APIs are
+finished and tested, but nothing in the UI calls them, because there is no
+frontend sign-in flow yet. That is worth doing before payments.
 
 To get oriented quickly:
 
